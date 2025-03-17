@@ -1,8 +1,6 @@
 function TableBody({tableBody}) {
-    console.log("tablebody: ", tableBody.data)
-    // const dateConversion = (new Date(tableBody.data.updated_at)).getFullYear()
-    // console.log(dateConversion)
     if (tableBody.data && tableBody.data.length > 0) {
+        console.log(tableBody.data)
         return (
             <tbody>
             {
