@@ -1,33 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import Header1 from "./Components/Header1/index.jsx";
+import Table from "./Components/Table/index.jsx";
+import {useEffect, useState} from "react";
+import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [products, setProducts] = useState([]);
+    const apiUrl = "http://localhost:3008"
+    const productTableHeaders = ["Product Name",
+        "Stock Quantity",
+        "Low Stock Threshold",
+        "Supplier Name",
+        "Unit Cost £",
+        "Last Updated"];
+
+    const getProducts = async (apiUrl) => {
+        const url = apiUrl + "/products";
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        setProducts(data);
+    }
+
+    useEffect(() => {
+        getProducts(apiUrl);
+    }, [])
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <Header1 headerText="Stock Tracker" />
+        <BrowserRouter>
+            <Link to='/products'>Products</Link>
+        <Routes>
+            <Route path='/products' element={
+            <Table tableHeaders={productTableHeaders} tableBody={products} />}
+                   />
+
+        </Routes>
+        </BrowserRouter>
+
     </>
   )
 }
